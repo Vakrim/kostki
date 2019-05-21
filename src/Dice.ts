@@ -1,20 +1,22 @@
-export class Dice {
-  probabilities: ProbabiltyMap;
+import { ProbabilityMap } from "./ProbabilityMap";
 
-  constructor(probabilities: ProbabiltyMap);
+export class Dice {
+  probabilities: ProbabilityMap<number>;
+
+  constructor(probabilities: ProbabilityMap<number>);
   constructor(sides: number);
   constructor(primitivePossibilites: number[][]);
-  constructor(arg: number | ProbabiltyMap | number[][]) {
-    if (arg instanceof ProbabiltyMap) {
+  constructor(arg: number | ProbabilityMap<number> | number[][]) {
+    if (arg instanceof ProbabilityMap) {
       this.probabilities = arg;
     } else if (typeof arg === "number") {
-      this.probabilities = new ProbabiltyMap(increase => {
+      this.probabilities = new ProbabilityMap(increase => {
         for (let i = 1; i <= arg; i++) {
           increase(i, 1);
         }
       });
     } else {
-      this.probabilities = new ProbabiltyMap(increase => {
+      this.probabilities = new ProbabilityMap(increase => {
         arg.forEach(probability => {
           increase(probability[0], probability[1]);
         });
@@ -62,7 +64,7 @@ export class Dice {
     other: Dice,
     combiner: (value: number, otherValue: number) => number
   ): Dice {
-    const result = new ProbabiltyMap(increase => {
+    const result = new ProbabilityMap<number>(increase => {
       for (let [value, thisCombinations] of this.probabilities) {
         for (let [otherValue, otherCombinations] of other.probabilities) {
           increase(
@@ -77,7 +79,7 @@ export class Dice {
   }
 
   private map(mapper: (value: number) => number): Dice {
-    const result = new ProbabiltyMap(increase => {
+    const result = new ProbabilityMap<number>(increase => {
       for (let [value, thisCombinations] of this.probabilities) {
         increase(mapper(value), thisCombinations);
       }
@@ -87,7 +89,7 @@ export class Dice {
   }
 
   mapTo(mapper: (value: number) => Dice): Dice {
-    const result = new ProbabiltyMap(increase => {
+    const result = new ProbabilityMap<number>(increase => {
       for (let [value, thisCombinations] of this.probabilities) {
         const dice = mapper(value);
 
@@ -98,45 +100,5 @@ export class Dice {
     });
 
     return new Dice(result);
-  }
-}
-
-class ProbabiltyMap {
-  private map: Map<number, number> = new Map();
-  private sum = 0;
-
-  constructor(setter: (increase: (value: number, probality: number) => void) => void) {
-    setter((value: number, probality: number) => {
-      this.increase(value, probality);
-    });
-    this.normalizeProbabilites();
-  }
-
-  private increase(value: number, probality: number = 1): void {
-    const current = this.map.get(value);
-    if (typeof current === "undefined") {
-      this.map.set(value, probality);
-    } else {
-      this.map.set(value, current + probality);
-    }
-    this.sum += probality;
-  }
-
-  private normalizeProbabilites(): void {
-    this.map.forEach((probality, value) => {
-      this.map.set(value, probality / this.sum);
-    });
-
-    this.sum = 1;
-  }
-
-  getProbabilityOf(value: number): number {
-    return this.map.get(value) || 0;
-  }
-
-  *[Symbol.iterator]() {
-    for (let pair of this.map) {
-      yield pair;
-    }
   }
 }
