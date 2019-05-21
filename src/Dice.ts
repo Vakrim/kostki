@@ -1,20 +1,17 @@
 import { ProbabilityMap } from "./ProbabilityMap";
 
-export class Dice {
-  probabilities: ProbabilityMap<number>;
+class GenericDice<T extends number | string> {
+  probabilities: ProbabilityMap<T>;
+}
 
+export class Dice extends GenericDice<number> {
   constructor(probabilities: ProbabilityMap<number>);
-  constructor(sides: number);
   constructor(primitivePossibilites: number[][]);
-  constructor(arg: number | ProbabilityMap<number> | number[][]) {
+  constructor(arg: ProbabilityMap<number> | number[][]) {
+    super();
+
     if (arg instanceof ProbabilityMap) {
       this.probabilities = arg;
-    } else if (typeof arg === "number") {
-      this.probabilities = new ProbabilityMap(increase => {
-        for (let i = 1; i <= arg; i++) {
-          increase(i, 1);
-        }
-      });
     } else {
       this.probabilities = new ProbabilityMap(increase => {
         arg.forEach(probability => {
@@ -22,6 +19,15 @@ export class Dice {
         });
       });
     }
+  }
+
+  static create(sides: number): Dice {
+    const primitivePossibilites = [];
+    for (let i = 1; i <= sides; i++) {
+      primitivePossibilites.push([i, 1]);
+    }
+
+    return new Dice(primitivePossibilites);
   }
 
   add(other: Dice): Dice {

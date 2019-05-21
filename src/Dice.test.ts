@@ -4,7 +4,7 @@ import { d2, d4, roll } from "./diceFactories";
 describe("Dice", () => {
   describe("constructor", () => {
     it("creates dice from number", () => {
-      const result = new Dice(2);
+      const result = Dice.create(2);
       expect(result.getProbabilityOf(1)).toEqual(1 / 2);
       expect(result.getProbabilityOf(2)).toEqual(1 / 2);
     });
