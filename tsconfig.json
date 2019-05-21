@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonJS",
+    "sourceMap": true,
+    "target": "es5",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictFunctionTypes": true,
+    "experimentalDecorators": true,
+    "lib": ["esnext", "dom"],
+    "noEmit": true,
+    "downlevelIteration": true
+  },
+  "include": ["src/**/*"]
+}

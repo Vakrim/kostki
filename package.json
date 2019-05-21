@@ -1,0 +1,47 @@
+{
+  "name": "dices",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest",
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --mode development"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow/tfjs": "^1.1.2",
+    "prettier": "^1.17.1",
+    "ts-node": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.2",
+    "jest": "^24.8.0",
+    "ts-jest": "^23.1.4",
+    "ts-loader": "^5.1.1",
+    "typescript": "^3.0.3",
+    "webpack": "^4.32.0",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.4.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "collectCoverage": true,
+  "coverageReporters": [
+    "lcov"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.ts"
+  ]
+}
