@@ -12,6 +12,6 @@ export function d10() {
   return Dice.create(10);
 }
 
-export function roll(count: number, sides: number): Dice[] {
+export function roll(count: number, sides: number): Dice<number>[] {
   return new Array(count).fill(null).map(() => Dice.create(sides));
 }

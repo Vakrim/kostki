@@ -1,4 +1,4 @@
-import { Dice } from "./Dice";
+import { Dice, add, higherOfTwo, count, higherOrEqual } from "./Dice";
 import { d2, d4, roll } from "./diceFactories";
 
 describe("Dice", () => {
@@ -11,7 +11,7 @@ describe("Dice", () => {
   });
 
   it("adds probabilities", () => {
-    const result = d2().add(d2());
+    const result = add(d2(), d2());
 
     expect(result.getProbabilityOf(2)).toEqual(1 / 4);
     expect(result.getProbabilityOf(3)).toEqual(2 / 4);
@@ -19,7 +19,7 @@ describe("Dice", () => {
   });
 
   it("maxes probabilities", () => {
-    const result = d2().higher(d2());
+    const result = higherOfTwo(d2(), d2());
 
     expect(result.getProbabilityOf(1)).toEqual(1 / 4);
     expect(result.getProbabilityOf(2)).toEqual(3 / 4);
@@ -35,9 +35,7 @@ describe("Dice", () => {
   it("counts higherOrEqual to number", () => {
     const dices = roll(2, 3);
 
-    const result = dices
-      .map(dice => dice.higherOrEqual(2))
-      .reduce((aDice, bDice) => aDice.add(bDice));
+    const result = count(dices.map(dice => higherOrEqual(dice, 2)));
 
     expect(result.getProbabilityOf(0)).toEqual(1 / 9); // 1,1
     expect(result.getProbabilityOf(1)).toEqual(4 / 9); // 1,2  1,3  2,1  3,1
@@ -45,9 +43,7 @@ describe("Dice", () => {
   });
 
   it("can be mapped to other dices", () => {
-    const atackRoll = roll(2, 2)
-      .map(dice => dice.higherOrEqual(2))
-      .reduce((aDice, bDice) => aDice.add(bDice));
+    const atackRoll = count(roll(2, 2).map(dice => higherOrEqual(dice, 2)));
 
     expect(atackRoll.getProbabilityOf(0)).toEqual(1 / 4); // 1,1
     expect(atackRoll.getProbabilityOf(1)).toEqual(2 / 4); // 1,2  2,1
@@ -57,9 +53,9 @@ describe("Dice", () => {
       if (numberOfHits === 0) {
         return new Dice([[0, 1]]);
       }
-      const damage = roll(numberOfHits, 2)
-        .map(dice => dice.higherOrEqual(2))
-        .reduce((aDice, bDice) => aDice.add(bDice));
+      const damage = count(
+        roll(numberOfHits, 2).map(dice => higherOrEqual(dice, 2))
+      );
       return damage;
     });
 

@@ -1,17 +1,15 @@
 import { roll } from "./diceFactories";
-import { Dice } from "./Dice";
+import { Dice, add, count, higherOrEqual } from "./Dice";
 
-const atackRoll = roll(2, 10)
-  .map(dice => dice.higherOrEqual(7))
-  .reduce((aDice, bDice) => aDice.add(bDice));
+const atackRoll = count(roll(2, 10).map(dice => higherOrEqual(dice, 7)));
 
-const result = atackRoll.mapTo(numberOfHits => {
+const result = atackRoll.mapTo<string | number>(numberOfHits => {
   if (numberOfHits === 0) {
-    return new Dice([[0, 1]]);
+    return new Dice([["miss", 1]]);
   }
-  const damage = roll(numberOfHits, 10)
-    .map(dice => dice.higherOrEqual(7))
-    .reduce((aDice, bDice) => aDice.add(bDice));
+  const damage = count(
+    roll(numberOfHits, 10).map(dice => higherOrEqual(dice, 7))
+  );
   return damage;
 });
 

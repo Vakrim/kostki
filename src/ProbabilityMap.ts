@@ -1,4 +1,4 @@
-export class ProbabilityMap<T extends number | string> {
+export class ProbabilityMap<T extends Primitive> {
   private map: Map<T, number> = new Map();
   private sum = 0;
 
@@ -38,3 +38,5 @@ export class ProbabilityMap<T extends number | string> {
     }
   }
 }
+
+type Primitive = string | number | boolean;
