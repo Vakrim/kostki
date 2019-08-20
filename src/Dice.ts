@@ -1,6 +1,6 @@
 import { ProbabilityMap } from "./ProbabilityMap";
 
-export class Dice<T extends Primitive> {
+export class Dice<T> {
   private probabilities: ProbabilityMap<T>;
 
   constructor(probabilities: ProbabilityMap<T>);
@@ -26,7 +26,11 @@ export class Dice<T extends Primitive> {
     return new Dice(primitivePossibilites);
   }
 
-  when<R extends Primitive = Primitive>(
+  static always<T>(value: T) {
+    return new Dice([[value, 1]]);
+  }
+
+  when<R>(
     condition: (value: T) => boolean,
     ifTrue: (value: T) => R,
     ifFalse: (value: T) => R
@@ -48,7 +52,7 @@ export class Dice<T extends Primitive> {
     return this.probabilities.getProbabilityOf(value);
   }
 
-  combine<G extends Primitive, R extends Primitive>(
+  combine<G, R>(
     other: Dice<G>,
     combiner: (value: T, otherValue: G) => R
   ): Dice<R> {
@@ -66,7 +70,7 @@ export class Dice<T extends Primitive> {
     return new Dice(result);
   }
 
-  map<G extends Primitive>(mapper: (value: T) => G): Dice<G> {
+  map<G>(mapper: (value: T) => G): Dice<G> {
     const result = new ProbabilityMap<G>(increase => {
       for (let [value, thisCombinations] of this.probabilities) {
         increase(mapper(value), thisCombinations);
@@ -76,7 +80,7 @@ export class Dice<T extends Primitive> {
     return new Dice<G>(result);
   }
 
-  mapTo<R extends Primitive>(mapper: (value: T) => Dice<R>): Dice<R> {
+  mapTo<R>(mapper: (value: T) => Dice<R>): Dice<R> {
     const result = new ProbabilityMap<R>(increase => {
       for (let [value, thisCombinations] of this.probabilities) {
         const dice = mapper(value);
@@ -90,8 +94,6 @@ export class Dice<T extends Primitive> {
     return new Dice(result);
   }
 }
-
-type Primitive = string | number | boolean;
 
 export function add(dice: Dice<number>, other: Dice<number>): Dice<number> {
   return dice.combine(other, (value, otherValue) => {
