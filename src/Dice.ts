@@ -57,11 +57,11 @@ export class Dice<T> {
     combiner: (value: T, otherValue: G) => R
   ): Dice<R> {
     const result = new ProbabilityMap<R>(increase => {
-      for (let [value, thisCombinations] of this.probabilities) {
-        for (let [otherValue, otherCombinations] of other.probabilities) {
+      for (let [value, thisProbability] of this.probabilities) {
+        for (let [otherValue, otherProbability] of other.probabilities) {
           increase(
             combiner(value, otherValue),
-            thisCombinations * otherCombinations
+            thisProbability * otherProbability
           );
         }
       }
@@ -72,8 +72,8 @@ export class Dice<T> {
 
   map<G>(mapper: (value: T) => G): Dice<G> {
     const result = new ProbabilityMap<G>(increase => {
-      for (let [value, thisCombinations] of this.probabilities) {
-        increase(mapper(value), thisCombinations);
+      for (let [value, thisProbability] of this.probabilities) {
+        increase(mapper(value), thisProbability);
       }
     });
 
@@ -82,16 +82,34 @@ export class Dice<T> {
 
   mapTo<R>(mapper: (value: T) => Dice<R>): Dice<R> {
     const result = new ProbabilityMap<R>(increase => {
-      for (let [value, thisCombinations] of this.probabilities) {
+      for (let [value, thisProbability] of this.probabilities) {
         const dice = mapper(value);
 
-        for (let [otherValue, otherCombinations] of dice.probabilities) {
-          increase(otherValue, thisCombinations * otherCombinations);
+        for (let [otherValue, otherProbability] of dice.probabilities) {
+          increase(otherValue, thisProbability * otherProbability);
         }
       }
     });
 
     return new Dice(result);
+  }
+
+  simplify(threshold: number = 0.005): Dice<T> {
+    const result = new ProbabilityMap<T>(increase => {
+      for (let [value, thisProbability] of this.probabilities) {
+        if (thisProbability > threshold) {
+          increase(value, thisProbability);
+        }
+      }
+    });
+
+    return new Dice<T>(result);
+  }
+
+  toString(): string {
+    return [...this.probabilities]
+      .map(([v, k]) => `${v.toString()} with ${(k * 100).toFixed(2)}%`)
+      .join("\n");
   }
 }
 
@@ -101,7 +119,10 @@ export function add(dice: Dice<number>, other: Dice<number>): Dice<number> {
   });
 }
 
-export function higherOfTwo(dice: Dice<number>, other: Dice<number>): Dice<number> {
+export function higherOfTwo(
+  dice: Dice<number>,
+  other: Dice<number>
+): Dice<number> {
   return dice.combine(other, (value, otherValue) => {
     return Math.max(value, otherValue);
   });

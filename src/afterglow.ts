@@ -11,32 +11,71 @@ function roll(diceCount: number) {
   };
 }
 
-const atackRoll = roll(3).andKeepHigherThan(7);
+function attack({
+  attackDices,
+  defenceThreshold,
+  weaponDamage,
+  headArmour,
+  bodyArmour,
+  tryAimForHead = true
+}: {
+  attackDices: number;
+  defenceThreshold: number;
+  weaponDamage: number;
+  headArmour: number;
+  bodyArmour: number;
+  tryAimForHead?: boolean;
+}) {
+  const atackRoll = roll(attackDices).andKeepHigherThan(defenceThreshold);
 
-const weaponDamage = 4;
+  return atackRoll
+    .mapTo<"miss" | number>(numberOfHits => {
+      if (numberOfHits === 0) {
+        return Dice.always("miss");
+      } else if (tryAimForHead && numberOfHits >= 3) {
+        return roll(numberOfHits - 2 + weaponDamage).andKeepHigherThan(
+          headArmour
+        );
+      } else {
+        return roll(numberOfHits + weaponDamage).andKeepHigherThan(bodyArmour);
+      }
+    })
+    .map(damagePoints => {
+      if (damagePoints === "miss" || damagePoints === 0) {
+        return "no damage";
+      } else if (damagePoints <= 2) {
+        return "light wound";
+      } else if (damagePoints <= 4) {
+        return "severe wound";
+      } else if (damagePoints <= 5) {
+        return "critical wound";
+      } else {
+        return "fatal wound";
+      }
+    })
+    .simplify();
+}
 
-const damageRoll = atackRoll
-  .mapTo<"miss" | number>(numberOfHits => {
-    if (numberOfHits === 0) {
-      return Dice.always("miss");
-    } else if (numberOfHits >= 3) {
-      return roll(numberOfHits - 2 + weaponDamage).andKeepHigherThan(6);
-    } else {
-      return roll(numberOfHits + weaponDamage).andKeepHigherThan(9);
-    }
-  })
-  .map(damagePoints => {
-    if (damagePoints === "miss" || damagePoints === 0) {
-      return "no damage";
-    } else if (damagePoints <= 2) {
-      return "light wound";
-    } else if (damagePoints <= 4) {
-      return "severe wound";
-    } else if (damagePoints <= 5) {
-      return "critical wound";
-    } else {
-      return "fatal wound";
-    }
-  });
+console.log(
+  'Try aim for head\n',
+  attack({
+    attackDices: 3,
+    defenceThreshold: 7,
+    weaponDamage: 4,
+    headArmour: 6,
+    bodyArmour: 9,
+    tryAimForHead: true
+  }).toString()
+);
 
-console.log(damageRoll);
+console.log(
+  'Body shoot\n',
+  attack({
+    attackDices: 3,
+    defenceThreshold: 7,
+    weaponDamage: 4,
+    headArmour: 6,
+    bodyArmour: 9,
+    tryAimForHead: false
+  }).toString()
+);

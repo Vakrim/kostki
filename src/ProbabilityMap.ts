@@ -6,28 +6,28 @@ export class ProbabilityMap<T extends any> {
   private sum = 0;
 
   constructor(
-    setter: (increase: (value: T, probality: number) => void) => void
+    setter: (increase: (value: T, probability: number) => void) => void
   ) {
-    setter((value: T, probality: number) => {
-      this.increase(value, probality);
+    setter((value: T, probability: number) => {
+      this.increase(value, probability);
     });
     this.normalizeProbabilites();
   }
 
-  private increase(value: T, probality: number = 1): void {
+  private increase(value: T, probability: number = 1): void {
     const valueRepesantative = this.getRepresentative(value);
     const current = this.map.get(valueRepesantative);
     if (typeof current === "undefined") {
-      this.map.set(valueRepesantative, probality);
+      this.map.set(valueRepesantative, probability);
     } else {
-      this.map.set(valueRepesantative, current + probality);
+      this.map.set(valueRepesantative, current + probability);
     }
-    this.sum += probality;
+    this.sum += probability;
   }
 
   private normalizeProbabilites(): void {
-    this.map.forEach((probality, valueHash) => {
-      this.map.set(valueHash, probality / this.sum);
+    this.map.forEach((probability, valueHash) => {
+      this.map.set(valueHash, probability / this.sum);
     });
     this.sum = 1;
   }
