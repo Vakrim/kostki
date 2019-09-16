@@ -3,24 +3,27 @@ import { Dice, sum } from "../src/Dice";
 import { rollTest, FAIL, enemy } from "./rogue-trader";
 
 interface Weapon {
-  damageBase: number,
-  aimedBonus: number,
-  penetration: number,
-  rateOfFire: number
+  damageBase: number;
+  aimedBonus: number;
+  penetration: number;
+  rateOfFire: number;
+  maxAimedHits: number;
 }
 
 const ArcheotechLaspistol: Weapon = {
   damageBase: 3,
   aimedBonus: 10,
   penetration: 2,
-  rateOfFire: 3
+  rateOfFire: 3,
+  maxAimedHits: Infinity,
 };
 
 const PlasmaPistol: Weapon = {
   damageBase: 6,
   aimedBonus: 0,
   penetration: 6,
-  rateOfFire: 2
+  rateOfFire: 2,
+  maxAimedHits: 1,
 };
 
 const aimBonus = 10,
@@ -53,31 +56,39 @@ function renderResult(label: string, dice: Dice<number>) {
 
 renderResult("simple", simple);
 
-const aimed = rollTest(WS + aimBonus + ArcheotechLaspistol.aimedBonus).mapTo(
-  result => {
-    if (result.type === FAIL) {
-      return Dice.always(damage(0, 0));
-    }
+function aimed(gun: Weapon, modificator: number = 0) {
+  return rollTest(WS + aimBonus + gun.aimedBonus).mapTo(
+    result => {
+      if (result.type === FAIL) {
+        return Dice.always(damage(0, 0));
+      }
 
-    const hits = 1 + Math.floor(result.DoS / 2);
+      const hits = Math.min(1 + Math.floor(result.DoS / 2), gun.maxAimedHits);
 
-    const hitRolls = Array.from({ length: hits }, () =>
-      d10().map(dmg =>
-        damage(
-          dmg + ArcheotechLaspistol.damageBase,
-          ArcheotechLaspistol.penetration
+      const hitRolls = Array.from({ length: hits }, () =>
+        d10().map(dmg =>
+          damage(
+            dmg + gun.damageBase,
+            gun.penetration
+          )
         )
-      )
-    );
+      );
 
-    return sum(hitRolls);
-  }
-);
+      return sum(hitRolls);
+    }
+  );
+}
 
-renderResult("aimed", aimed);
+const aimedLaspistol = aimed(ArcheotechLaspistol);
 
-function semiAuto(gun: Weapon, offhandPenalty: number = 0) {
-  return rollTest(WS + semiAutoBonus + offhandPenalty).mapTo(result => {
+renderResult("aimed: Laspistol", aimedLaspistol);
+
+const aimedPlasma = aimed(PlasmaPistol);
+
+renderResult("aimed: Plasma", aimedPlasma);
+
+function semiAuto(gun: Weapon, modificator: number = 0) {
+  return rollTest(WS + semiAutoBonus + modificator).mapTo(result => {
     if (result.type === FAIL) {
       return Dice.always(damage(0, 0));
     }
@@ -100,10 +111,16 @@ const semiAutoPlasmaPistol = semiAuto(PlasmaPistol);
 
 renderResult("semiAuto: PlasmaPistol", semiAutoPlasmaPistol);
 
-const semiAutoLaspistolAndPlasma = sum([semiAuto(ArcheotechLaspistol), semiAuto(PlasmaPistol, -20)]);
+const semiAutoLaspistolAndPlasma = sum([
+  semiAuto(ArcheotechLaspistol, -20),
+  semiAuto(PlasmaPistol, -20)
+]);
 
 renderResult("semiAuto: Laspistol and Plasma", semiAutoLaspistolAndPlasma);
 
-const semiAutoPlasmaAndLaspistol = sum([semiAuto(PlasmaPistol), semiAuto(ArcheotechLaspistol, -20)]);
+const semiAutoPlasmaAndLaspistol = sum([
+  semiAuto(PlasmaPistol, -20),
+  semiAuto(ArcheotechLaspistol, -20)
+]);
 
 renderResult("semiAuto: Plasma And Laspistol", semiAutoPlasmaAndLaspistol);
