@@ -108,8 +108,12 @@ export class Dice<T> {
 
   toString(): string {
     return [...this.probabilities]
-      .map(([v, k]) => `${v.toString()} with ${(k * 100).toFixed(2)}%`)
+      .map(([v, k]) => `${JSON.stringify(v)} with ${(k * 100).toFixed(2)}%`)
       .join("\n");
+  }
+
+  get pairs(): [T, number][] {
+    return [...this.probabilities]
   }
 }
 
@@ -117,6 +121,10 @@ export function add(dice: Dice<number>, other: Dice<number>): Dice<number> {
   return dice.combine(other, (value, otherValue) => {
     return value + otherValue;
   });
+}
+
+export function sum(dices: Dice<number>[]): Dice<number> {
+  return dices.reduce((prev, current) => add(prev, current));
 }
 
 export function higherOfTwo(
