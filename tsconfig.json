@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "dist",
     "module": "commonJS",
     "sourceMap": true,
     "target": "es5",
@@ -8,8 +9,9 @@
     "strictFunctionTypes": true,
     "experimentalDecorators": true,
     "lib": ["esnext", "dom"],
-    "noEmit": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "declaration": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude" : ["src/**/*.test.ts"]
 }

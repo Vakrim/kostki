@@ -1,5 +1,6 @@
-import { d100, d10, roll } from "../src/diceFactories";
-import { Dice, sum } from "../src/Dice";
+import { d10 } from "../../src/diceFactories";
+import { sum } from "../../src/helpers";
+import { Dice  } from "../../src/Dice";
 import { rollTest, FAIL, enemy } from "./rogue-trader";
 
 interface Weapon {

@@ -1,4 +1,5 @@
-import { Dice, add, higherOfTwo, count, higherOrEqual } from "./Dice";
+import { Dice } from "./Dice";
+import { add, higherOfTwo, count, higherOrEqual } from "./helpers";
 import { d2, d4, roll } from "./diceFactories";
 
 describe("Dice", () => {
