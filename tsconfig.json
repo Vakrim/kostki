@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonJS",
+    "module": "umd",
     "sourceMap": true,
     "target": "es5",
+    "skipLibCheck": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictFunctionTypes": true,

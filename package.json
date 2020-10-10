@@ -9,12 +9,13 @@
   },
   "scripts": {
     "test": "jest",
-    "prepublish": "tsc"
+    "prepare": "tsc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Vakrim/kostki.git"
   },
+  "files": ["dist/**/*"],
   "keywords": [],
   "author": "",
   "license": "ISC",
