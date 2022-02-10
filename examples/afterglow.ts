@@ -1,24 +1,24 @@
 import { roll as baseRoll } from "../src/diceFactories";
 import { Dice } from "../src/Dice";
-import { add, count, higherOrEqual } from "../src/helpers";
+import { count, higherOrEqual } from "../src/helpers";
 
 function roll(diceCount: number) {
   return {
     andKeepHigherThan(threshold: number) {
       return count(
-        baseRoll(diceCount, 10).map(dice => higherOrEqual(dice, threshold))
+        baseRoll(diceCount, 10).map((dice) => higherOrEqual(dice, threshold))
       );
-    }
+    },
   };
 }
 
-function attack({
+export function attack({
   attackDices,
   defenceThreshold,
   weaponDamage,
   headArmour,
   bodyArmour,
-  tryAimForHead = true
+  tryAimForHead = true,
 }: {
   attackDices: number;
   defenceThreshold: number;
@@ -30,7 +30,7 @@ function attack({
   const atackRoll = roll(attackDices).andKeepHigherThan(defenceThreshold);
 
   return atackRoll
-    .mapTo<"miss" | number>(numberOfHits => {
+    .mapTo<"miss" | number>((numberOfHits) => {
       if (numberOfHits === 0) {
         return Dice.always("miss");
       } else if (tryAimForHead && numberOfHits >= 3) {
@@ -41,7 +41,7 @@ function attack({
         return roll(numberOfHits + weaponDamage).andKeepHigherThan(bodyArmour);
       }
     })
-    .map(damagePoints => {
+    .map((damagePoints) => {
       if (damagePoints === "miss" || damagePoints === 0) {
         return "no damage";
       } else if (damagePoints <= 2) {
@@ -56,27 +56,3 @@ function attack({
     })
     .simplify();
 }
-
-console.log(
-  'Try aim for head\n',
-  attack({
-    attackDices: 3,
-    defenceThreshold: 7,
-    weaponDamage: 4,
-    headArmour: 6,
-    bodyArmour: 9,
-    tryAimForHead: true
-  }).toString()
-);
-
-console.log(
-  'Body shoot\n',
-  attack({
-    attackDices: 3,
-    defenceThreshold: 7,
-    weaponDamage: 4,
-    headArmour: 6,
-    bodyArmour: 9,
-    tryAimForHead: false
-  }).toString()
-);
