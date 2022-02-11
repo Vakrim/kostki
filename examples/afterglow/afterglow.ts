@@ -1,6 +1,6 @@
-import { roll as baseRoll } from "../src/diceFactories";
-import { Dice } from "../src/Dice";
-import { count, higherOrEqual } from "../src/helpers";
+import { roll as baseRoll } from "../../src/diceFactories";
+import { Dice } from "../../src/Dice";
+import { count, higherOrEqual } from "../../src/helpers";
 
 function roll(diceCount: number) {
   return {

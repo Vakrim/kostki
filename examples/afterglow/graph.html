@@ -1,0 +1,20 @@
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <div style="width: 800px; height: 600px">
+        <canvas id="plot"></canvas>
+      </div>
+      <div style="width: 800px; height: 600px">
+        <canvas id="plot-sum"></canvas>
+      </div>
+      <script>
+        const ctx = document.getElementById('plot').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {"labels":["no damage","light wound","severe wound"],"datasets":[{"label":"head shoot","data":[{"x":"no damage","y":0.43618890441011804},{"x":"light wound","y":0.48069523414134274},{"x":"severe wound","y":0.08311586144853925}],"borderColor":"hsl(0, 80%, 60%)","backgroundColor":"hsla(0, 80%, 60%, 0.5)"},{"label":"body shoot","data":[{"x":"no damage","y":0.44687832298419927},{"x":"light wound","y":0.49099100068618423},{"x":"severe wound","y":0.06213067632961648}],"borderColor":"hsl(180, 80%, 60%)","backgroundColor":"hsla(180, 80%, 60%, 0.5)"}]},
+        });
+
+        const ctxSum = document.getElementById('plot-sum').getContext('2d');
+        new Chart(ctxSum, {
+            type: 'line',
+            data: {"labels":["no damage","light wound","severe wound"],"datasets":[{"label":"head shoot","data":[{"x":"no damage","y":1},{"x":"light wound","y":0.563811095589882},{"x":"severe wound","y":0.08311586144853925}],"borderColor":"hsl(0, 80%, 60%)","backgroundColor":"hsla(0, 80%, 60%, 0.5)"},{"label":"body shoot","data":[{"x":"no damage","y":1},{"x":"light wound","y":0.5531216770158007},{"x":"severe wound","y":0.06213067632961648}],"borderColor":"hsl(180, 80%, 60%)","backgroundColor":"hsla(180, 80%, 60%, 0.5)"}]},
+        });
+      </script>
