@@ -9,12 +9,108 @@
         const ctx = document.getElementById('plot').getContext('2d');
         new Chart(ctx, {
             type: 'line',
-            data: {"labels":["no damage","light wound","severe wound"],"datasets":[{"label":"head shoot","data":[{"x":"no damage","y":0.43618890441011804},{"x":"light wound","y":0.48069523414134274},{"x":"severe wound","y":0.08311586144853925}],"borderColor":"hsl(0, 80%, 60%)","backgroundColor":"hsla(0, 80%, 60%, 0.5)"},{"label":"body shoot","data":[{"x":"no damage","y":0.44687832298419927},{"x":"light wound","y":0.49099100068618423},{"x":"severe wound","y":0.06213067632961648}],"borderColor":"hsl(180, 80%, 60%)","backgroundColor":"hsla(180, 80%, 60%, 0.5)"}]},
+            data: {
+  "labels": [
+    "no damage",
+    "light wound",
+    "severe wound"
+  ],
+  "datasets": [
+    {
+      "label": "head shoot",
+      "data": [
+        {
+          "x": "no damage",
+          "y": 0.43618890441011804
+        },
+        {
+          "x": "light wound",
+          "y": 0.48069523414134274
+        },
+        {
+          "x": "severe wound",
+          "y": 0.08311586144853925
+        }
+      ],
+      "stepped": "middle",
+      "borderColor": "hsl(0, 80%, 60%)",
+      "backgroundColor": "hsla(0, 80%, 60%, 0.5)"
+    },
+    {
+      "label": "body shoot",
+      "data": [
+        {
+          "x": "no damage",
+          "y": 0.44687832298419927
+        },
+        {
+          "x": "light wound",
+          "y": 0.49099100068618423
+        },
+        {
+          "x": "severe wound",
+          "y": 0.06213067632961648
+        }
+      ],
+      "stepped": "middle",
+      "borderColor": "hsl(180, 80%, 60%)",
+      "backgroundColor": "hsla(180, 80%, 60%, 0.5)"
+    }
+  ]
+},
         });
 
         const ctxSum = document.getElementById('plot-sum').getContext('2d');
         new Chart(ctxSum, {
             type: 'line',
-            data: {"labels":["no damage","light wound","severe wound"],"datasets":[{"label":"head shoot","data":[{"x":"no damage","y":1},{"x":"light wound","y":0.563811095589882},{"x":"severe wound","y":0.08311586144853925}],"borderColor":"hsl(0, 80%, 60%)","backgroundColor":"hsla(0, 80%, 60%, 0.5)"},{"label":"body shoot","data":[{"x":"no damage","y":1},{"x":"light wound","y":0.5531216770158007},{"x":"severe wound","y":0.06213067632961648}],"borderColor":"hsl(180, 80%, 60%)","backgroundColor":"hsla(180, 80%, 60%, 0.5)"}]},
+            data: {
+  "labels": [
+    "no damage",
+    "light wound",
+    "severe wound"
+  ],
+  "datasets": [
+    {
+      "label": "head shoot",
+      "data": [
+        {
+          "x": "no damage",
+          "y": 1
+        },
+        {
+          "x": "light wound",
+          "y": 0.563811095589882
+        },
+        {
+          "x": "severe wound",
+          "y": 0.08311586144853925
+        }
+      ],
+      "stepped": "after",
+      "borderColor": "hsl(0, 80%, 60%)",
+      "backgroundColor": "hsla(0, 80%, 60%, 0.5)"
+    },
+    {
+      "label": "body shoot",
+      "data": [
+        {
+          "x": "no damage",
+          "y": 1
+        },
+        {
+          "x": "light wound",
+          "y": 0.5531216770158007
+        },
+        {
+          "x": "severe wound",
+          "y": 0.06213067632961648
+        }
+      ],
+      "stepped": "after",
+      "borderColor": "hsl(180, 80%, 60%)",
+      "backgroundColor": "hsla(180, 80%, 60%, 0.5)"
+    }
+  ]
+},
         });
       </script>

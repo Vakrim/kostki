@@ -29,19 +29,28 @@ export class Graph<T = number> {
     writeFileSync(
       filePath,
       this.renderTemplate(
-        JSON.stringify(this.createGraphData((x) => x)),
+        JSON.stringify(
+          this.createGraphData((x) => x, "middle"),
+          undefined,
+          2
+        ),
         JSON.stringify(
           this.createGraphData((data) => {
             let sum = 0;
-            return data.reverse().map((point) => {
-              sum += point.y;
+            return data
+              .reverse()
+              .map((point) => {
+                sum += point.y;
 
-              return {
-                x: point.x,
-                y: sum,
-              };
-            }).reverse();
-          })
+                return {
+                  x: point.x,
+                  y: sum,
+                };
+              })
+              .reverse();
+          }, "after"),
+          undefined,
+          2
         )
       ),
       "utf-8"
@@ -49,7 +58,8 @@ export class Graph<T = number> {
   }
 
   private createGraphData(
-    dataMapper: (data: { x: T; y: number }[]) => { x: T; y: number }[]
+    dataMapper: (data: { x: T; y: number }[]) => { x: T; y: number }[],
+    stepConfig: "middle" | "after"
   ) {
     return {
       labels: Array.from(
@@ -60,6 +70,7 @@ export class Graph<T = number> {
         data: dataMapper(
           dataset.data.sort((a, b) => this.labelSorter(a.x, b.x))
         ),
+        stepped: stepConfig,
         borderColor: `hsl(${(index / this.datasets.length) * 360}, 80%, 60%)`,
         backgroundColor: `hsla(${
           (index / this.datasets.length) * 360
