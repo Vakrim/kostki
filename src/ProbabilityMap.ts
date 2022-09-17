@@ -1,6 +1,6 @@
-import * as hash from "object-hash";
+import { sha1 as hash } from "object-hash";
 
-export class ProbabilityMap<T extends any> {
+export class ProbabilityMap<T> {
   private map: Map<T, number> = new Map();
   private valuesCache: Map<string, T> = new Map();
   private sum = 0;
@@ -33,7 +33,13 @@ export class ProbabilityMap<T extends any> {
   }
 
   private getRepresentative(value: T): T {
-    if (typeof value === "number" || typeof value === "string") {
+    if (
+      typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "bigint" ||
+      value === null ||
+      value === undefined
+    ) {
       return value;
     }
 
