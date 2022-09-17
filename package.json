@@ -1,5 +1,5 @@
 {
-  "name": "@vakrim/kostki",
+  "name": "kostki",
   "version": "0.5.0",
   "scripts": {
     "clean": "rm -rf ./lib",
