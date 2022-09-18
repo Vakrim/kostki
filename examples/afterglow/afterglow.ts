@@ -1,12 +1,12 @@
 import { roll as baseRoll } from "../../src/diceFactories";
 import { Dice } from "../../src/Dice";
-import { count, higherOrEqual } from "../../src/helpers";
+import { count, isHigherOrEqual } from "../../src/helpers";
 
 function roll(diceCount: number) {
   return {
     andKeepHigherThan(threshold: number) {
       return count(
-        baseRoll(diceCount, 10).map((dice) => higherOrEqual(dice, threshold))
+        baseRoll(diceCount, 10).map((dice) => isHigherOrEqual(dice, threshold))
       );
     },
   };

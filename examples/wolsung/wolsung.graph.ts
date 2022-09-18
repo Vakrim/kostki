@@ -1,7 +1,7 @@
 import { Graph } from "../../graph/Graph";
 import { Dice } from "../../src/Dice";
-import { d10, roll } from "../../src/diceFactories";
-import { higherOfTwo } from "../../src/helpers";
+import { d10 } from "../../src/diceFactories";
+import { getHigherOfTwo } from "../../src/helpers";
 
 const graph = new Graph();
 
@@ -23,22 +23,20 @@ function test(explodingThreshold: number, bonus: number) {
       throw "fock";
     }
 
-    roll = roll
-      .combine(d10(), (accumulatorDice, nextRoll) => {
-        if (!accumulatorDice.isExploding) {
-          return {
-            ...accumulatorDice,
-          };
-        }
-
-        const isExploding = nextRoll >= explodingThreshold;
-
+    roll = Dice.combine(roll, d10(), (accumulatorDice, nextRoll) => {
+      if (!accumulatorDice.isExploding) {
         return {
-          value: accumulatorDice.value + (isExploding ? 10 : nextRoll),
-          isExploding,
+          ...accumulatorDice,
         };
-      })
-      .simplify(0.0001);
+      }
+
+      const isExploding = nextRoll >= explodingThreshold;
+
+      return {
+        value: accumulatorDice.value + (isExploding ? 10 : nextRoll),
+        isExploding,
+      };
+    }).simplify(0.0001);
   }
 
   return roll.map((v) => v.value + bonus);
@@ -48,11 +46,11 @@ const test9 = test(9, 3);
 const test8 = test(8, 3);
 
 function twoDices(dice: Dice<number>) {
-  return higherOfTwo(dice, dice)
+  return getHigherOfTwo(dice, dice);
 }
 
 function threeDices(dice: Dice<number>) {
-  return higherOfTwo(dice, twoDices(dice));
+  return getHigherOfTwo(dice, twoDices(dice));
 }
 
 graph.addDataset("2x(reroll on 9) + 3", twoDices(test9));
@@ -60,6 +58,5 @@ graph.addDataset("2x(reroll on 8) + 3", twoDices(test8));
 graph.addDataset("2x(reroll on 9) + 6", twoDices(test(9, 6)));
 graph.addDataset("3x(reroll on 8) + 3", threeDices(test8));
 graph.addDataset("3x(reroll on 9) + 6", threeDices(test(9, 6)));
-
 
 graph.saveToFile(__dirname + "/graph.html");

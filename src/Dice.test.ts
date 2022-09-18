@@ -1,8 +1,8 @@
 import { Dice } from "./Dice";
-import { add, higherOfTwo, count, higherOrEqual } from "./helpers";
+import { add, getHigherOfTwo, count, isHigherOrEqual } from "./helpers";
 import { d2, d4, roll } from "./diceFactories";
 
-describe("Dice", () => {
+describe(Dice, () => {
   describe("constructor", () => {
     it("creates dice from number", () => {
       const result = Dice.create(2);
@@ -20,7 +20,7 @@ describe("Dice", () => {
   });
 
   it("maxes probabilities", () => {
-    const result = higherOfTwo(d2(), d2());
+    const result = getHigherOfTwo(d2(), d2());
 
     expect(result.getProbabilityOf(1)).toEqual(1 / 4);
     expect(result.getProbabilityOf(2)).toEqual(3 / 4);
@@ -33,10 +33,10 @@ describe("Dice", () => {
     expect(result.getProbabilityOf(2)).toEqual(2 / 4);
   });
 
-  it("counts higherOrEqual to number", () => {
+  it("counts isHigherOrEqual to number", () => {
     const dices = roll(2, 3);
 
-    const result = count(dices.map(dice => higherOrEqual(dice, 2)));
+    const result = count(dices.map(dice => isHigherOrEqual(dice, 2)));
 
     expect(result.getProbabilityOf(0)).toEqual(1 / 9); // 1,1
     expect(result.getProbabilityOf(1)).toEqual(4 / 9); // 1,2  1,3  2,1  3,1
@@ -44,7 +44,7 @@ describe("Dice", () => {
   });
 
   it("can be mapped to other dices", () => {
-    const atackRoll = count(roll(2, 2).map(dice => higherOrEqual(dice, 2)));
+    const atackRoll = count(roll(2, 2).map(dice => isHigherOrEqual(dice, 2)));
 
     expect(atackRoll.getProbabilityOf(0)).toEqual(1 / 4); // 1,1
     expect(atackRoll.getProbabilityOf(1)).toEqual(2 / 4); // 1,2  2,1
@@ -55,7 +55,7 @@ describe("Dice", () => {
         return new Dice([[0, 1]]);
       }
       const damage = count(
-        roll(numberOfHits, 2).map(dice => higherOrEqual(dice, 2))
+        roll(numberOfHits, 2).map(dice => isHigherOrEqual(dice, 2))
       );
       return damage;
     });
