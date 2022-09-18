@@ -1,6 +1,10 @@
 import { roll as baseRoll } from "../../src/diceFactories";
 import { Dice } from "../../src/Dice";
-import { count, isHigherOrEqual } from "../../src/helpers";
+import { map } from "../../src/operations/map";
+import { mapTo } from "../../src/operations/mapTo";
+import { simplify } from "../../src/operations/simplify";
+import { count } from "../../src/operations/count";
+import { isHigherOrEqual } from "../../src/operations/isHigherOrEqual";
 
 function roll(diceCount: number) {
   return {
@@ -29,30 +33,31 @@ export function attack({
 }) {
   const atackRoll = roll(attackDices).andKeepHigherThan(defenceThreshold);
 
-  return atackRoll
-    .mapTo<"miss" | number>((numberOfHits) => {
-      if (numberOfHits === 0) {
-        return Dice.always("miss");
-      } else if (tryAimForHead && numberOfHits >= 3) {
-        return roll(numberOfHits - 2 + weaponDamage).andKeepHigherThan(
-          headArmour
-        );
-      } else {
-        return roll(numberOfHits + weaponDamage).andKeepHigherThan(bodyArmour);
-      }
-    })
-    .map((damagePoints) => {
-      if (damagePoints === "miss" || damagePoints === 0) {
-        return "no damage";
-      } else if (damagePoints <= 2) {
-        return "light wound";
-      } else if (damagePoints <= 4) {
-        return "severe wound";
-      } else if (damagePoints <= 5) {
-        return "critical wound";
-      } else {
-        return "fatal wound";
-      }
-    })
-    .simplify();
+  const hit = mapTo(atackRoll, (numberOfHits): Dice<"miss" | number> => {
+    if (numberOfHits === 0) {
+      return Dice.always("miss" as const);
+    } else if (tryAimForHead && numberOfHits >= 3) {
+      return roll(numberOfHits - 2 + weaponDamage).andKeepHigherThan(
+        headArmour
+      );
+    } else {
+      return roll(numberOfHits + weaponDamage).andKeepHigherThan(bodyArmour);
+    }
+  });
+
+  const damage = map(hit, (damagePoints) => {
+    if (damagePoints === "miss" || damagePoints === 0) {
+      return "no damage";
+    } else if (damagePoints <= 2) {
+      return "light wound";
+    } else if (damagePoints <= 4) {
+      return "severe wound";
+    } else if (damagePoints <= 5) {
+      return "critical wound";
+    } else {
+      return "fatal wound";
+    }
+  });
+
+  return simplify(damage);
 }

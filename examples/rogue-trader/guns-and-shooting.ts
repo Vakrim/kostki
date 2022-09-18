@@ -1,7 +1,7 @@
 import { d10 } from "../../src/diceFactories";
-import { sum } from "../../src/helpers";
 import { Dice } from "../../src/Dice";
 import { rollTest, FAIL, enemy } from "./rogue-trader";
+import { sum } from "../../src/operations/sum";
 
 interface Weapon {
   damageBase: number;

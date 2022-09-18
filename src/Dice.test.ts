@@ -1,6 +1,10 @@
 import { Dice } from "./Dice";
-import { add, getHigherOfTwo, count, isHigherOrEqual } from "./helpers";
 import { d2, d4, roll } from "./diceFactories";
+import { add } from "./operations/add";
+import { count } from "./operations/count";
+import { isHigherOrEqual } from "./operations/isHigherOrEqual";
+import { mapTo } from "./operations/mapTo";
+import { max } from "./operations/max";
 
 describe(Dice, () => {
   describe("constructor", () => {
@@ -20,23 +24,16 @@ describe(Dice, () => {
   });
 
   it("maxes probabilities", () => {
-    const result = getHigherOfTwo(d2(), d2());
+    const result = max([d2(), d2()]);
 
     expect(result.getProbabilityOf(1)).toEqual(1 / 4);
     expect(result.getProbabilityOf(2)).toEqual(3 / 4);
   });
 
-  it("resolves conditions", () => {
-    const result = d4().when(r => r > 2, () => 2, () => 1);
-
-    expect(result.getProbabilityOf(1)).toEqual(2 / 4);
-    expect(result.getProbabilityOf(2)).toEqual(2 / 4);
-  });
-
   it("counts isHigherOrEqual to number", () => {
     const dices = roll(2, 3);
 
-    const result = count(dices.map(dice => isHigherOrEqual(dice, 2)));
+    const result = count(dices.map((dice) => isHigherOrEqual(dice, 2)));
 
     expect(result.getProbabilityOf(0)).toEqual(1 / 9); // 1,1
     expect(result.getProbabilityOf(1)).toEqual(4 / 9); // 1,2  1,3  2,1  3,1
@@ -44,18 +41,18 @@ describe(Dice, () => {
   });
 
   it("can be mapped to other dices", () => {
-    const atackRoll = count(roll(2, 2).map(dice => isHigherOrEqual(dice, 2)));
+    const atackRoll = count(roll(2, 2).map((dice) => isHigherOrEqual(dice, 2)));
 
     expect(atackRoll.getProbabilityOf(0)).toEqual(1 / 4); // 1,1
     expect(atackRoll.getProbabilityOf(1)).toEqual(2 / 4); // 1,2  2,1
     expect(atackRoll.getProbabilityOf(2)).toEqual(1 / 4); // 2,2
 
-    const result = atackRoll.mapTo(numberOfHits => {
+    const result = mapTo(atackRoll, (numberOfHits) => {
       if (numberOfHits === 0) {
         return new Dice([[0, 1]]);
       }
       const damage = count(
-        roll(numberOfHits, 2).map(dice => isHigherOrEqual(dice, 2))
+        roll(numberOfHits, 2).map((dice) => isHigherOrEqual(dice, 2))
       );
       return damage;
     });

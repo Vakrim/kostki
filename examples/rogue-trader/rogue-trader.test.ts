@@ -1,4 +1,4 @@
-import { sum } from "../../src/helpers";
+import { sum } from "../../src/operations/sum";
 import {
   aimedShoot,
   ArcheotechLaspistol,
