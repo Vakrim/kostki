@@ -1,8 +1,12 @@
 import { Dice } from "../Dice";
-import { combineList } from "./combineList";
+import { reduceList } from "./reduceList";
 
 export function count(dices: Dice<boolean>[]): Dice<number> {
-  return combineList(dices, (values) => {
-    return values.filter(Boolean).length;
-  });
+  return reduceList(
+    dices,
+    (prev, current) => {
+      return current ? prev + 1 : prev;
+    },
+    0
+  );
 }

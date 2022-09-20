@@ -1,8 +1,8 @@
 import { Dice } from "../Dice";
-import { combineList } from "./combineList";
+import { reduceList } from "./reduceList";
 
 export function min(dices: Dice<number>[]): Dice<number> {
-  return combineList(dices, (values) => {
-    return Math.min(...values);
+  return reduceList(dices, (previous, current) => {
+    return Math.min(previous, current);
   });
 }
