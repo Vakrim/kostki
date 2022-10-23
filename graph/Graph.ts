@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
-import { Dice } from "../src/Dice";
-import { d10 } from "../src/diceFactories";
-import { higherOfTwo, sum } from "../src/helpers";
+import { Dice } from "../packages/kostki/src/Dice";
+import { d10 } from "../packages/kostki/src/diceFactories";
+import { higherOfTwo, sum } from "../packages/kostki/src/helpers";
 
 export class Graph<T = number> {
   private datasets: {
