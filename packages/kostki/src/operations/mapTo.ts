@@ -6,10 +6,10 @@ export function mapTo<Result, T>(
   mapper: (value: T) => Dice<Result>
 ): Dice<Result> {
   const result = new ProbabilityMap<Result>((increase) => {
-    for (let [value, thisProbability] of dice.probabilities) {
+    for (let [value, thisProbability] of dice.probabilities.entries()) {
       const dice = mapper(value);
 
-      for (let [otherValue, otherProbability] of dice.probabilities) {
+      for (let [otherValue, otherProbability] of dice.probabilities.entries()) {
         increase(otherValue, thisProbability * otherProbability);
       }
     }

@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import { attack } from "./examples/afterglow/afterglow";
+import { getAfterglowGraph } from "./examples/afterglow/afterglow.graph";
+import { Form } from "./Form";
+import { Line } from "./Line";
 
 function App() {
+  const [value, setValue] = useState({
+    attackDices: 3,
+    defenceThreshold: 7,
+    weaponDamage: 4,
+    headArmour: 6,
+    bodyArmour: 9,
+    tryAimForHead: true,
+  });
+
+  const afterglowGraph = getAfterglowGraph();
+
+  afterglowGraph.addDataset("current", attack(value));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form
+        schema={{
+          attackDices: "number",
+          defenceThreshold: "number",
+          weaponDamage: "number",
+          headArmour: "number",
+          bodyArmour: "number",
+          tryAimForHead: "boolean",
+        }}
+        value={value}
+        onChange={setValue}
+      />
+      <Line data={afterglowGraph.regularGraph()} />
+      <Line data={afterglowGraph.sumGraph()} />
     </div>
   );
 }

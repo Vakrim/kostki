@@ -1,10 +1,12 @@
-import { roll as baseRoll } from "../../src/diceFactories";
-import { Dice } from "../../src/Dice";
-import { map } from "../../src/operations/map";
-import { mapTo } from "../../src/operations/mapTo";
-import { simplify } from "../../src/operations/simplify";
-import { count } from "../../src/operations/count";
-import { isHigherOrEqual } from "../../src/operations/isHigherOrEqual";
+import {
+  count,
+  Dice,
+  isHigherOrEqual,
+  map,
+  mapTo,
+  simplify,
+  roll as baseRoll,
+} from "kostki";
 
 function roll(diceCount: number) {
   return {
@@ -16,7 +18,7 @@ function roll(diceCount: number) {
   };
 }
 
-export function attack({
+export function  attack({
   attackDices,
   defenceThreshold,
   weaponDamage,

@@ -32,10 +32,6 @@ export class Dice<T> {
     return new Dice([[value, 1]]);
   }
 
-  debug() {
-    return [...this.probabilities].map(([v, k]) => [k, v]);
-  }
-
   getProbabilityOf(value: T): number {
     return this.probabilities.getProbabilityOf(value);
   }
@@ -49,12 +45,12 @@ export class Dice<T> {
   }
 
   toString(): string {
-    return [...this.probabilities]
+    return this.pairs
       .map(([v, k]) => `${JSON.stringify(v)} with ${(k * 100).toFixed(2)}%`)
       .join("\n");
   }
 
   get pairs(): [T, number][] {
-    return [...this.probabilities];
+    return [...this.probabilities.entries()];
   }
 }
