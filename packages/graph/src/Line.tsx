@@ -17,16 +17,16 @@ Chart.register(
   LineElement
 );
 
-export function Line<T,>({ data }: { data: ChartData<"line", T> }) {
+export function Line<T>({ data }: { data: ChartData<"line", T> }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const chart = useRef<Chart<'line', T> | null>(null);
+  const chart = useRef<Chart<"line", T> | null>(null);
 
   useEffect(() => {
     const context = canvas.current!.getContext("2d")!;
 
-    chart.current = new Chart<'line', T>(context, {
+    chart.current = new Chart<"line", T>(context, {
       type: "line",
-      data,
+      data: { datasets: [] },
     });
 
     return () => {
@@ -38,7 +38,21 @@ export function Line<T,>({ data }: { data: ChartData<"line", T> }) {
 
   useEffect(() => {
     if (chart.current) {
-      chart.current.data = data;
+      const currentDatasets = chart.current.data.datasets;
+      const newDatasets = data.datasets.map((newDataset) => {
+        const oldDataset = currentDatasets.find(
+          (d) => d.label && d.label === newDataset.label
+        );
+
+        if (oldDataset) {
+          oldDataset.data = newDataset.data;
+          return oldDataset;
+        } else {
+          return newDataset;
+        }
+      });
+
+      chart.current.data.datasets = newDatasets;
       chart.current.update();
     }
   }, [data]);

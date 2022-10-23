@@ -18,7 +18,7 @@ function roll(diceCount: number) {
   };
 }
 
-export function  attack({
+export function attack({
   attackDices,
   defenceThreshold,
   weaponDamage,
