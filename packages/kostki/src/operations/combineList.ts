@@ -14,7 +14,7 @@ export function combineList<Result, T>(
           pairs.reduce((acc, [, probability]) => acc * probability, 1)
         );
       },
-      dices.map((d) => d.probabilities.entries())
+      dices.map((d) => d.probabilities)
     );
   });
 

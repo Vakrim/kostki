@@ -45,12 +45,12 @@ export class Dice<T> {
   }
 
   toString(): string {
-    return this.pairs
+    return [...this.probabilities]
       .map(([v, k]) => `${JSON.stringify(v)} with ${(k * 100).toFixed(2)}%`)
       .join("\n");
   }
 
   get pairs(): [T, number][] {
-    return [...this.probabilities.entries()];
+    return [...this.probabilities];
   }
 }

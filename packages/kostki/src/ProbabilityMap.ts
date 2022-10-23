@@ -57,7 +57,9 @@ export class ProbabilityMap<T> {
     return this.map.get(this.getRepresentative(value)) || 0;
   }
 
-  entries(): [T, number][] {
-    return [...this.map.entries()];
+  *[Symbol.iterator]() {
+    for (let pair of this.map) {
+      yield pair;
+    }
   }
 }

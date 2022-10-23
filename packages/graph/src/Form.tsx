@@ -22,7 +22,7 @@ export function Form<Schema extends GenericSchema>({
     return Object.fromEntries(
       Array.from(form.current!.querySelectorAll("input")).map((input) => [
         input.name,
-        input.type === "number" ? input.value : input.checked,
+        input.type === "number" ? parseInt(input.value) : input.checked,
       ])
     ) as unknown as ValuesFromSchema<Schema>;
   };
