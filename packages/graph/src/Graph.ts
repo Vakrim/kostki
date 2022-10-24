@@ -47,21 +47,25 @@ export class Graph<T = number> {
     dataMapper: (data: { x: T; y: number }[]) => { x: T; y: number }[],
     stepConfig: "middle" | "after"
   ) {
+    const labels = Array.from(
+      new Set(this.datasets.flatMap((x) => x.data.map((v) => v.x)))
+    ).sort(this.labelSorter);
+
     return {
-      labels: Array.from(
-        new Set(this.datasets.flatMap((x) => x.data.map((v) => v.x)))
-      ).sort(this.labelSorter),
-      datasets: this.datasets.map((dataset, index) => ({
-        label: dataset.label,
-        data: dataMapper(
-          dataset.data.sort((a, b) => this.labelSorter(a.x, b.x))
-        ),
-        stepped: stepConfig,
-        borderColor: `hsl(${(index / this.datasets.length) * 360}, 80%, 60%)`,
-        backgroundColor: `hsla(${
-          (index / this.datasets.length) * 360
-        }, 80%, 60%, 0.5)`,
-      })),
+      labels,
+      datasets: this.datasets.map((dataset, index) => {
+        return {
+          label: dataset.label,
+          data: dataMapper(
+            dataset.data.sort((a, b) => this.labelSorter(a.x, b.x))
+          ),
+          stepped: stepConfig,
+          borderColor: `hsl(${(index / this.datasets.length) * 360}, 80%, 60%)`,
+          backgroundColor: `hsla(${
+            (index / this.datasets.length) * 360
+          }, 80%, 60%, 0.5)`,
+        };
+      }),
     };
   }
 }

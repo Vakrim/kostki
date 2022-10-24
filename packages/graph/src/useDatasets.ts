@@ -31,7 +31,7 @@ export function useDatasets<Schema extends GenericSchema>(
         case "add dataset":
           return [
             ...prev,
-            { id: nextId(), name: '', values: newDatasetFactory() },
+            { id: nextId(), name: "", values: newDatasetFactory() },
           ];
         case "update dataset values":
           return prev.map((dataset) => {
@@ -62,10 +62,7 @@ export function useDatasets<Schema extends GenericSchema>(
     initialState.map((is) => ({ ...is, id: nextId() }))
   );
 
-  const addDataset = useCallback(
-    () => dispatch({ type: "add dataset" }),
-    []
-  );
+  const addDataset = useCallback(() => dispatch({ type: "add dataset" }), []);
 
   const updateDatasetValues = useCallback(
     (id: number, values: ValuesFromSchema<Schema>) =>
@@ -94,13 +91,18 @@ export function useDatasets<Schema extends GenericSchema>(
   };
 }
 
-export type GenericSchema = Record<string, "number" | "boolean">;
+export type GenericSchema = Record<
+  string,
+  "number" | "boolean" | { enum: readonly string[] }
+>;
 
 export type ValuesFromSchema<S extends GenericSchema> = {
   [key in keyof S]: FieldType<S[key]>;
 };
 
-export type FieldType<T> = T extends "number"
+export type FieldType<T> = T extends { enum: ReadonlyArray<infer E> }
+  ? E
+  : T extends "number"
   ? number
   : T extends "boolean"
   ? boolean

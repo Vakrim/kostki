@@ -7,7 +7,7 @@ export function Form<Schema extends GenericSchema>({
   changeValues,
   name,
   changeName,
-  deleteDataset
+  deleteDataset,
 }: {
   schema: Schema;
   values: ValuesFromSchema<Schema>;
@@ -19,12 +19,18 @@ export function Form<Schema extends GenericSchema>({
   const form = useRef<HTMLDivElement>(null);
 
   const getValues = (): ValuesFromSchema<Schema> => {
-    return Object.fromEntries(
-      Array.from(form.current!.querySelectorAll("input")).map((input) => [
-        input.name,
-        input.type === "number" ? parseInt(input.value) : input.checked,
-      ])
-    ) as unknown as ValuesFromSchema<Schema>;
+    const values: any = {};
+
+    form.current!.querySelectorAll("input").forEach((input) => {
+      values[input.name] =
+        input.type === "number" ? parseInt(input.value) : input.checked;
+    });
+
+    form.current!.querySelectorAll("select").forEach((select) => {
+      values[select.name] = select.value;
+    });
+
+    return values;
   };
 
   return (
@@ -60,6 +66,24 @@ export function Form<Schema extends GenericSchema>({
                   checked={values[fieldName]}
                   onChange={() => changeValues(getValues())}
                 />
+              </div>
+            );
+          } else if ("enum" in fieldType) {
+            return (
+              <div key={fieldName}>
+                {fieldName}:{" "}
+                <select
+                  name={fieldName}
+                  // @ts-ignore
+                  value={values[fieldName]}
+                  onChange={() => changeValues(getValues())}
+                >
+                  {fieldType.enum.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
               </div>
             );
           }

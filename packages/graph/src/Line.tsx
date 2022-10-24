@@ -1,21 +1,7 @@
-import {
-  Chart,
-  ChartData,
-  LineController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-} from "chart.js";
+import { Chart, ChartData, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
 
-Chart.register(
-  LineController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement
-);
+Chart.register(...registerables);
 
 export function Line<T>({ data }: { data: ChartData<"line", T> }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -53,6 +39,7 @@ export function Line<T>({ data }: { data: ChartData<"line", T> }) {
       });
 
       chart.current.data.datasets = newDatasets;
+      chart.current.data.labels = data.labels;
       chart.current.update();
     }
   }, [data]);
