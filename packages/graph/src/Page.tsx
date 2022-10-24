@@ -33,7 +33,7 @@ export function Page<Schema extends GenericSchema, XLabels>({
   const graph = graphFactory();
 
   datasets.forEach((dataset) => {
-    graph.addDataset(dataset.id.toString(), calculate(dataset.values));
+    graph.addDataset(dataset.name, calculate(dataset.values));
   });
 
   return (
