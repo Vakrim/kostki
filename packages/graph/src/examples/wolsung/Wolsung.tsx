@@ -10,7 +10,7 @@ export function Wolsung() {
         rerollOn: "number",
         bonus: "number",
       }}
-      initalDatasets={[
+      initialDatasets={[
         {
           name: "2x(reroll on 9) + 3",
           values: { numDices: 2, rerollOn: 9, bonus: 3 },

@@ -5,7 +5,7 @@ describe("afterglow", () => {
     expect(
       `${attack({
         attackDices: 3,
-        defenceThreshold: 7,
+        defenseThreshold: 7,
         weaponDamage: 4,
         headArmour: 6,
         bodyArmour: 9,
@@ -22,7 +22,7 @@ describe("afterglow", () => {
     expect(
       `${attack({
         attackDices: 3,
-        defenceThreshold: 7,
+        defenseThreshold: 7,
         weaponDamage: 4,
         headArmour: 6,
         bodyArmour: 9,

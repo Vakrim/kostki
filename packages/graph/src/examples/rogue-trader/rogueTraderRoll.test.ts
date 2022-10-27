@@ -1,4 +1,3 @@
-import { sum } from "kostki";
 import {
   ArcheotechLaspistol,
   getResult,

@@ -7,18 +7,18 @@ export function Afterglow() {
     <Page
       schema={{
         attackDices: "number",
-        defenceThreshold: "number",
+        defenseThreshold: "number",
         weaponDamage: "number",
         headArmour: "number",
         bodyArmour: "number",
         tryAimForHead: "boolean",
       }}
-      initalDatasets={[
+      initialDatasets={[
         {
           name: "aiming for head",
           values: {
             attackDices: 3,
-            defenceThreshold: 7,
+            defenseThreshold: 7,
             weaponDamage: 4,
             headArmour: 6,
             bodyArmour: 9,
@@ -29,7 +29,7 @@ export function Afterglow() {
           name: "body shot",
           values: {
             attackDices: 3,
-            defenceThreshold: 7,
+            defenseThreshold: 7,
             weaponDamage: 4,
             headArmour: 6,
             bodyArmour: 9,
@@ -39,7 +39,7 @@ export function Afterglow() {
       ]}
       newDatasetFactory={() => ({
         attackDices: 3,
-        defenceThreshold: 7,
+        defenseThreshold: 7,
         weaponDamage: 4,
         headArmour: 6,
         bodyArmour: 9,

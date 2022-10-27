@@ -9,7 +9,7 @@ export function RogueTrader() {
         gun: { enum: ["ArcheotechLaspistol", "PlasmaPistol"] as const },
         fireType: { enum: ["simple", "aimed", "semiAuto"] as const },
       }}
-      initalDatasets={[
+      initialDatasets={[
         {
           name: "simple shoot",
           values: { gun: "ArcheotechLaspistol", fireType: "simple" },
