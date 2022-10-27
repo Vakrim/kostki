@@ -20,22 +20,22 @@ function roll(diceCount: number) {
 
 export function attack({
   attackDices,
-  defenceThreshold,
+  defenseThreshold,
   weaponDamage,
   headArmour,
   bodyArmour,
   tryAimForHead = true,
 }: {
   attackDices: number;
-  defenceThreshold: number;
+  defenseThreshold: number;
   weaponDamage: number;
   headArmour: number;
   bodyArmour: number;
   tryAimForHead?: boolean;
 }) {
-  const atackRoll = roll(attackDices).andKeepHigherThan(defenceThreshold);
+  const attackRoll = roll(attackDices).andKeepHigherThan(defenseThreshold);
 
-  const hit = mapTo(atackRoll, (numberOfHits): Dice<"miss" | number> => {
+  const hit = mapTo(attackRoll, (numberOfHits): Dice<"miss" | number> => {
     if (numberOfHits === 0) {
       return Dice.always("miss" as const);
     } else if (tryAimForHead && numberOfHits >= 3) {

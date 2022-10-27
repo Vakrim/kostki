@@ -44,7 +44,10 @@ export class Dice<T> {
     return mapTo(this, mapper);
   }
 
-  toString(): string {
+  [Symbol.toPrimitive](hint: "string" | "number" | "default") {
+    if (hint === "number") {
+      throw TypeError("Unexpected conversion to number");
+    }
     return [...this.probabilities]
       .map(([v, k]) => `${JSON.stringify(v)} with ${(k * 100).toFixed(2)}%`)
       .join("\n");

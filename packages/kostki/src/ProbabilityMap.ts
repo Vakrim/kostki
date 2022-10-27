@@ -54,7 +54,7 @@ export class ProbabilityMap<T> {
   }
 
   getProbabilityOf(value: T): number {
-    return this.map.get(this.getRepresentative(value)) || 0;
+    return this.map.get(this.getRepresentative(value)) ?? 0;
   }
 
   *[Symbol.iterator]() {

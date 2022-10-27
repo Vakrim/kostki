@@ -7,13 +7,13 @@ import { GenericSchema, useDatasets, ValuesFromSchema } from "./useDatasets";
 
 export function Page<Schema extends GenericSchema, XLabels>({
   schema,
-  initalDatasets,
+  initialDatasets,
   newDatasetFactory,
   graphFactory,
   calculate
 }: {
   schema: Schema;
-  initalDatasets: { name: string; values: ValuesFromSchema<Schema> }[];
+  initialDatasets: { name: string; values: ValuesFromSchema<Schema> }[];
   newDatasetFactory: () => ValuesFromSchema<Schema>;
   graphFactory: () => Graph<XLabels>,
   calculate: (input: ValuesFromSchema<Schema>) => Dice<XLabels>,
@@ -26,7 +26,7 @@ export function Page<Schema extends GenericSchema, XLabels>({
     deleteDataset,
   } = useDatasets(
     schema,
-    initalDatasets,
+    initialDatasets,
     newDatasetFactory
   );
 
