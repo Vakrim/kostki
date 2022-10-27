@@ -8,20 +8,20 @@ import {
 describe("rogue trader", () => {
   it("simple shoot", () => {
     expect(getResult(fire(ArcheotechLaspistol, "simple")).average).toBeCloseTo(
-      3.824
+      6.375
     );
   });
 
   it("aimed Laspistol", () => {
     const aimedLaspistol = fire(ArcheotechLaspistol, "aimed");
 
-    expect(getResult(aimedLaspistol).average).toBeCloseTo(11.9);
+    expect(getResult(aimedLaspistol).average).toBeCloseTo(11.475);
   });
 
   it("aimed Plasma", () => {
     const aimedPlasma = fire(PlasmaPistol, "aimed");
 
-    expect(getResult(aimedPlasma).average).toBeCloseTo(6.325);
+    expect(getResult(aimedPlasma).average).toBeCloseTo(10.35);
   });
 
   it("semiAuto: Laspistol", () => {

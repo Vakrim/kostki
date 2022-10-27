@@ -12,9 +12,9 @@ describe("afterglow", () => {
         tryAimForHead: true,
       })}`
     ).toMatchInlineSnapshot(`
-      ""no damage" with 43.62%
-      "light wound" with 48.07%
-      "severe wound" with 8.31%"
+      "\\"no damage\\" with 43.62%
+      \\"light wound\\" with 48.07%
+      \\"severe wound\\" with 8.31%"
     `);
   });
 
@@ -29,9 +29,9 @@ describe("afterglow", () => {
         tryAimForHead: false,
       })}`
     ).toMatchInlineSnapshot(`
-      ""no damage" with 44.69%
-      "light wound" with 49.10%
-      "severe wound" with 6.21%"
+      "\\"no damage\\" with 44.69%
+      \\"light wound\\" with 49.10%
+      \\"severe wound\\" with 6.21%"
     `);
   });
 });

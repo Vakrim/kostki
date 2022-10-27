@@ -26,3 +26,7 @@ jobs:
       - run: pnpm install
       - run: pnpm test
         working-directory: ./packages/kostki
+      - run: pnpm build
+        working-directory: ./packages/kostki
+      - run: pnpm test
+        working-directory: ./packages/graph
