@@ -1,4 +1,4 @@
-import { attack } from "./afterglow";
+import { attack } from "./afterglowRoll";
 
 describe("afterglow", () => {
   it("Try aim for head", () => {

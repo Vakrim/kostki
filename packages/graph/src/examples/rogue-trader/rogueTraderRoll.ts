@@ -1,5 +1,4 @@
-import { Dice } from "../../src/Dice";
-import { d100 } from "../../src/diceFactories";
+import { Dice, d100 } from "kostki";
 
 export const FAIL = Symbol();
 export const SUCCESS = Symbol();
