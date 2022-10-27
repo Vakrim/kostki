@@ -1,27 +1,32 @@
 name: Release
+
 on:
   workflow_run:
-    workflows: ['Tests']
+    workflows: ["Tests"]
     branches: [main]
     types:
       - completed
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
         with:
-          fetch-depth: 0
+          version: 7
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: "18.x"
       - name: Install dependencies
-        run: npm ci
+        run: pnpm ci
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+        working-directory: ./packages/kostki
