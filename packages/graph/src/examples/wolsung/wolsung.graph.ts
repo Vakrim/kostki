@@ -1,4 +1,4 @@
-import { d10, simplify, combine, max } from "kostki";
+import { d10, simplify, combine, max, Dice } from "kostki";
 
 function test(explodingThreshold: number, bonus: number) {
   let roll = d10().map((v) => {
@@ -15,7 +15,7 @@ function test(explodingThreshold: number, bonus: number) {
   while (roll.pairs.some(([rollResult]) => rollResult.isExploding)) {
     x--;
     if (x < 0) {
-      throw new Error('Still exploding dices...');
+      throw new Error("Still exploding dices...");
     }
 
     roll = simplify(
@@ -40,6 +40,28 @@ function test(explodingThreshold: number, bonus: number) {
   return roll.map((v) => v.value + bonus);
 }
 
+const memoized = new Map<string, Dice<number>>();
+
+function memoizeTest(explodingThreshold: number, bonus: number) {
+  const key = getTestKey(explodingThreshold, bonus);
+
+  const cached = memoized.get(key);
+
+  if (cached) {
+    return cached;
+  }
+
+  const computed = test(explodingThreshold, bonus);
+
+  memoized.set(key, computed);
+
+  return computed;
+}
+
+function getTestKey(explodingThreshold: number, bonus: number) {
+  return [explodingThreshold, bonus].join("-");
+}
+
 export function maxOfManyDices({
   rerollOn,
   bonus,
@@ -49,7 +71,7 @@ export function maxOfManyDices({
   bonus: number;
   numDices: number;
 }) {
-  const dice = test(rerollOn, bonus);
+  const dice = memoizeTest(rerollOn, bonus);
 
   return max(Array(numDices).fill(dice));
 }
