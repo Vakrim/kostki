@@ -8,6 +8,8 @@ export function Navbar() {
       <NavLink to="/wolsung">Wolsung</NavLink>
 
       <NavLink to="/rogue-trader">RogueTrader</NavLink>
+
+      <NavLink to="/shadowrun">Shadowrun</NavLink>
     </div>
   );
 }

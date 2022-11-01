@@ -42,7 +42,7 @@ export function combine<R>(...args: unknown[]): Dice<R> {
 
   if (typeof combiner !== "function") {
     throw new TypeError(
-      "Last arguement of combine is expected to be a function"
+      "Last argument of combine is expected to be a function"
     );
   }
 

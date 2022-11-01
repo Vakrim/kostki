@@ -6,7 +6,7 @@ export class Dice<T> {
   readonly probabilities: ProbabilityMap<T>;
 
   constructor(probabilities: ProbabilityMap<T>);
-  constructor(primitivePossibilites: [T, number][]);
+  constructor(primitivePossibilities: [T, number][]);
   constructor(arg: ProbabilityMap<T> | [T, number][]) {
     if (arg instanceof ProbabilityMap) {
       this.probabilities = arg;
@@ -20,12 +20,12 @@ export class Dice<T> {
   }
 
   static create(sides: number): Dice<number> {
-    const primitivePossibilites: [number, number][] = [];
+    const primitivePossibilities: [number, number][] = [];
     for (let i = 1; i <= sides; i++) {
-      primitivePossibilites.push([i, 1]);
+      primitivePossibilities.push([i, 1]);
     }
 
-    return new Dice(primitivePossibilites);
+    return new Dice(primitivePossibilities);
   }
 
   static always<T>(value: T) {

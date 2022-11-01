@@ -8,7 +8,12 @@ export class Graph<T = number> {
   private labelSorter: (a: T, b: T) => number;
 
   constructor(
-    sorter: (a: T, b: T) => number = (a, b) => (a as any) - (b as any)
+    sorter: (a: T, b: T) => number = (a, b) => {
+      if (typeof a === "number" && typeof b === "number") {
+        return a - b;
+      }
+      return 0;
+    }
   ) {
     this.labelSorter = sorter;
   }
@@ -43,13 +48,22 @@ export class Graph<T = number> {
     }, "after");
   }
 
+  private formatLabel(x: T) {
+    if (typeof x === "string" || typeof x === "number") return `${x}`;
+    return JSON.stringify(x);
+  }
+
   private createGraphData(
-    dataMapper: (data: { x: T; y: number }[]) => { x: T; y: number }[],
+    dataMapper: (
+      data: { x: string; y: number }[]
+    ) => { x: string; y: number }[],
     stepConfig: "middle" | "after"
   ) {
     const labels = Array.from(
       new Set(this.datasets.flatMap((x) => x.data.map((v) => v.x)))
-    ).sort(this.labelSorter);
+    )
+      .sort(this.labelSorter)
+      .map(this.formatLabel);
 
     return {
       labels,
@@ -57,7 +71,12 @@ export class Graph<T = number> {
         return {
           label: dataset.label,
           data: dataMapper(
-            dataset.data.sort((a, b) => this.labelSorter(a.x, b.x))
+            dataset.data
+              .sort((a, b) => this.labelSorter(a.x, b.x))
+              .map((point) => ({
+                x: this.formatLabel(point.x),
+                y: point.y,
+              }))
           ),
           stepped: stepConfig,
           borderColor: `hsl(${(index / this.datasets.length) * 360}, 80%, 60%)`,
