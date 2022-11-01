@@ -10,13 +10,15 @@ export function Page<Schema extends GenericSchema, XLabels>({
   initialDatasets,
   newDatasetFactory,
   graphFactory,
-  calculate
+  calculate,
+  drawGraphs = true,
 }: {
   schema: Schema;
   initialDatasets: { name: string; values: ValuesFromSchema<Schema> }[];
   newDatasetFactory: () => ValuesFromSchema<Schema>;
-  graphFactory: () => Graph<XLabels>,
-  calculate: (input: ValuesFromSchema<Schema>) => Dice<XLabels>,
+  graphFactory: () => Graph<XLabels>;
+  calculate: (input: ValuesFromSchema<Schema>) => Dice<XLabels>;
+  drawGraphs?: boolean;
 }) {
   const {
     datasets,
@@ -24,16 +26,16 @@ export function Page<Schema extends GenericSchema, XLabels>({
     updateDatasetValues,
     updateDatasetName,
     deleteDataset,
-  } = useDatasets(
-    schema,
-    initialDatasets,
-    newDatasetFactory
-  );
+  } = useDatasets(schema, initialDatasets, newDatasetFactory);
 
   const graph = graphFactory();
 
   datasets.forEach((dataset) => {
-    graph.addDataset(dataset.name, calculate(dataset.values));
+    const calculationResults = calculate(dataset.values);
+    console.dir(calculationResults);
+    if (drawGraphs) {
+      graph.addDataset(dataset.name, calculationResults);
+    }
   });
 
   return (
@@ -55,8 +57,12 @@ export function Page<Schema extends GenericSchema, XLabels>({
         </div>
       ))}
       <button onClick={addDataset}>Add</button>
-      <Line data={graph.regularGraph()} />
-      <Line data={graph.sumGraph()} />
+      {drawGraphs && (
+        <>
+          <Line data={graph.regularGraph()} />
+          <Line data={graph.sumGraph()} />
+        </>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { RogueTrader } from "./examples/rogue-trader/RogueTrader";
 import { Wolsung } from "./examples/wolsung/Wolsung";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import { Shadowrun } from "./examples/shadowrun/Shadowrun";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
 
         <Route path="/rogue-trader" element={<RogueTrader />} />
 
+        <Route path="/shadowrun" element={<Shadowrun />} />
+
         <Route path="/*" element={<Navigate to="/afterglow" />} />
       </Routes>
     </>
@@ -24,8 +27,8 @@ function App() {
 
 export function AppWithProviders() {
   return (
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   );
 }

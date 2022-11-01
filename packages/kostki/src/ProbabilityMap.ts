@@ -1,7 +1,8 @@
-import { sha1 as hash } from "object-hash";
+import { stableStringify } from "./stableStringify";
 
 export class ProbabilityMap<T> {
   private map: Map<T, number> = new Map();
+  private stringifiedValues: Map<T, string> = new Map();
   private valuesCache: Map<string, T> = new Map();
   private sum = 0;
 
@@ -11,21 +12,22 @@ export class ProbabilityMap<T> {
     setter((value: T, probability: number) => {
       this.increase(value, probability);
     });
-    this.normalizeProbabilites();
+    this.stringifiedValues.clear();
+    this.normalizeProbabilities();
   }
 
   private increase(value: T, probability: number = 1): void {
-    const valueRepesantative = this.getRepresentative(value);
-    const current = this.map.get(valueRepesantative);
+    const valueRepresentative = this.getRepresentative(value);
+    const current = this.map.get(valueRepresentative);
     if (typeof current === "undefined") {
-      this.map.set(valueRepesantative, probability);
+      this.map.set(valueRepresentative, probability);
     } else {
-      this.map.set(valueRepesantative, current + probability);
+      this.map.set(valueRepresentative, current + probability);
     }
     this.sum += probability;
   }
 
-  private normalizeProbabilites(): void {
+  private normalizeProbabilities(): void {
     this.map.forEach((probability, valueHash) => {
       this.map.set(valueHash, probability / this.sum);
     });
@@ -43,14 +45,28 @@ export class ProbabilityMap<T> {
       return value;
     }
 
-    const valueHash = hash(value);
-    const representative = this.valuesCache.get(valueHash);
+    const valueSerialized = this.getSerialized(value);
+    const representative = this.valuesCache.get(valueSerialized);
     if (typeof representative === "undefined") {
-      this.valuesCache.set(valueHash, value);
+      this.valuesCache.set(valueSerialized, value);
       return value;
     } else {
       return representative;
     }
+  }
+
+  private getSerialized(value: T & {}): string {
+    const stringifiedBefore = this.stringifiedValues.get(value);
+
+    if (stringifiedBefore !== undefined) {
+      return stringifiedBefore;
+    }
+
+    const stringified = stableStringify(value);
+
+    this.stringifiedValues.set(value, stringified);
+
+    return stringified;
   }
 
   getProbabilityOf(value: T): number {
