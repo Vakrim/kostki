@@ -6,7 +6,6 @@ export function registerSprite({
   registering,
   spriteLevel,
   fadingResistance,
-  expectedNumberOfTasks,
   stunRecovery,
   hoursOfOperation,
 }: {
@@ -15,7 +14,6 @@ export function registerSprite({
   registering: number;
   spriteLevel: number;
   fadingResistance: number;
-  expectedNumberOfTasks: number;
   stunRecovery: number;
   hoursOfOperation: number;
 }) {

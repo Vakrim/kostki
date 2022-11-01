@@ -11,7 +11,6 @@ export function Shadowrun() {
         registering: "number",
         spriteLevel: "number",
         fadingResistance: "number",
-        expectedNumberOfTasks: "number",
         stunRecovery: "number",
         hoursOfOperation: "number",
       }}
@@ -24,7 +23,6 @@ export function Shadowrun() {
             registering: 6,
             spriteLevel: 6,
             fadingResistance: 14,
-            expectedNumberOfTasks: 3,
             stunRecovery: 8,
             hoursOfOperation: 3,
           },
@@ -36,7 +34,6 @@ export function Shadowrun() {
         registering: 6,
         spriteLevel: 6,
         fadingResistance: 14,
-        expectedNumberOfTasks: 3,
         stunRecovery: 8,
         hoursOfOperation: 3,
       })}

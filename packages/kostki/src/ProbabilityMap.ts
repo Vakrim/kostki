@@ -2,6 +2,7 @@ import { stableStringify } from "./stableStringify";
 
 export class ProbabilityMap<T> {
   private map: Map<T, number> = new Map();
+  private stringifiedValues: Map<T, string> = new Map();
   private valuesCache: Map<string, T> = new Map();
   private sum = 0;
 
@@ -11,6 +12,7 @@ export class ProbabilityMap<T> {
     setter((value: T, probability: number) => {
       this.increase(value, probability);
     });
+    this.stringifiedValues.clear();
     this.normalizeProbabilities();
   }
 
@@ -43,7 +45,7 @@ export class ProbabilityMap<T> {
       return value;
     }
 
-    const valueSerialized = stableStringify(value);
+    const valueSerialized = this.getSerialized(value);
     const representative = this.valuesCache.get(valueSerialized);
     if (typeof representative === "undefined") {
       this.valuesCache.set(valueSerialized, value);
@@ -51,6 +53,20 @@ export class ProbabilityMap<T> {
     } else {
       return representative;
     }
+  }
+
+  private getSerialized(value: T & {}): string {
+    const stringifiedBefore = this.stringifiedValues.get(value);
+
+    if (stringifiedBefore !== undefined) {
+      return stringifiedBefore;
+    }
+
+    const stringified = stableStringify(value);
+
+    this.stringifiedValues.set(value, stringified);
+
+    return stringified;
   }
 
   getProbabilityOf(value: T): number {
