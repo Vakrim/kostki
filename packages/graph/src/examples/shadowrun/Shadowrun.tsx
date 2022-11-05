@@ -1,6 +1,6 @@
 import { Graph } from "../../Graph";
 import { Page } from "../../Page";
-import { registerSprite, Result, State } from "./calculations";
+import { registerSprite, Result } from "./calculations";
 
 export function Shadowrun() {
   return (

@@ -1,4 +1,10 @@
-import { combine, Dice, map, reduceWithN, simplify } from "kostki";
+import {
+  combineState,
+  Dice,
+  map,
+  reduceWithN,
+  simplify,
+} from "kostki";
 
 export function registerSprite({
   resonance,
@@ -27,8 +33,6 @@ export function registerSprite({
   const spriteCompilationResistanceTest = test(spriteLevel);
 
   const spriteRegistrationResistanceTest = test(spriteLevel * 2);
-
-  // const tasks = subtractNatural(compilingHits, spriteResistanceHits);
 
   let state = Dice.always<State>({
     hoursPassed: 0,
@@ -98,16 +102,13 @@ function register({
   spriteLevel: number;
   hoursOfOperation: number;
 }) {
-  state = combine(
+  const result = combineState(
     state,
     registeringTest,
     spriteRegistrationResistanceTest,
     fadingResistanceTest,
+    (s: State) => shouldRegister(s, spriteLevel, hoursOfOperation),
     (s, registeringHits, spriteHits, fadingResistanceHits) => {
-      if (!shouldRegister(s, spriteLevel, hoursOfOperation)) {
-        return s;
-      }
-
       const damage = Math.max(
         0,
         Math.max(spriteHits * 2, 2) - fadingResistanceHits
@@ -126,7 +127,7 @@ function register({
       };
     }
   );
-  return state;
+  return result.state;
 }
 
 function compile({
@@ -141,21 +142,16 @@ function compile({
   fadingResistanceTest: Dice<number>;
   hoursOfOperation: number;
 }) {
-  for (
-    let tries = 0;
-    tries < 5 && state.pairs.some(([s]) => shouldCompile(s));
-    tries++
-  ) {
-    state = combine(
+  let someCombined = true;
+
+  for (let tries = 0; tries < 5 && someCombined; tries++) {
+    const result = combineState(
       state,
       compilingTest,
       spriteResistanceTest,
       fadingResistanceTest,
+      (s: State) => shouldCompile(s),
       (s, compilingHits, spriteHits, fadingResistanceHits): State => {
-        if (!shouldCompile(s)) {
-          return s;
-        }
-
         const damage = Math.max(
           0,
           Math.max(spriteHits * 2, 2) - fadingResistanceHits
@@ -170,6 +166,9 @@ function compile({
         };
       }
     );
+
+    someCombined = result.some;
+    state = result.state;
   }
   return state;
 }
@@ -187,22 +186,24 @@ function recover({
   hoursOfOperation: number;
   stunRecovery: number;
 }) {
-  for (
-    let tries = 0;
-    tries < 5 && state.pairs.some(([s]) => shouldRecover(s, hoursOfOperation));
-    tries++
-  ) {
-    state = combine(state, test(stunRecovery), (s, recovery): State => {
-      if (!shouldRecover(s, hoursOfOperation)) {
-        return s;
-      }
+  let someCombined = true;
 
-      return {
-        ...s,
-        hoursPassed: s.hoursPassed + 1,
-        stunDamage: Math.max(0, s.stunDamage - recovery),
-      };
-    });
+  for (let tries = 0; tries < 5 && someCombined; tries++) {
+    const result = combineState(
+      state,
+      test(stunRecovery),
+      (s) => shouldRecover(s, hoursOfOperation),
+      (s, recovery): State => {
+        return {
+          ...s,
+          hoursPassed: s.hoursPassed + 1,
+          stunDamage: Math.max(0, s.stunDamage - recovery),
+        };
+      }
+    );
+
+    someCombined = result.some;
+    state = result.state;
   }
   return state;
 }
@@ -220,5 +221,5 @@ function shouldRegister(
   spriteLevel: number,
   hoursOfOperation: number
 ) {
-  return s.compiledSprite && s.hoursPassed + spriteLevel <= hoursOfOperation;
+  return !!s.compiledSprite && s.hoursPassed + spriteLevel <= hoursOfOperation;
 }
