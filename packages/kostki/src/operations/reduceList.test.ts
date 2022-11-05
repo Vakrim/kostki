@@ -3,8 +3,6 @@ import { reduceList } from "./reduceList";
 
 describe(reduceList, () => {
   it("reduces list of dices by combining them", () => {
-    const add = jest.fn((a: number, b: number) => a + b);
-
     const sum = reduceList([d10(), d10(), d10(), d10()], add);
 
     expect(add).toHaveBeenCalledTimes(
@@ -51,4 +49,28 @@ describe(reduceList, () => {
       40 with 0.01%"
     `);
   });
+
+  it("expects at least one dice", () => {
+    expect(() => reduceList([], add)).toThrowError(
+      "reduceList expects at least 1 element in list"
+    );
+  });
+
+  it("handles one value without initial value", () => {
+    expect(`${reduceList([d10()], add)}`).toMatchInlineSnapshot(`
+      "1 with 10.00%
+      2 with 10.00%
+      3 with 10.00%
+      4 with 10.00%
+      5 with 10.00%
+      6 with 10.00%
+      7 with 10.00%
+      8 with 10.00%
+      9 with 10.00%
+      10 with 10.00%"
+    `
+    );
+  });
 });
+
+const add = jest.fn((a: number, b: number) => a + b);

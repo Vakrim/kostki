@@ -15,17 +15,21 @@ export function reduceList<Result, T>(
   combiner: (prev: Result, current: T) => Result,
   initialValue?: Result
 ): Dice<T | Result> {
-  if (dices.length === 0) {
-    throw new TypeError("reduceList expectes at least 1 element in list");
+  if (dices.length < 1) {
+    throw new TypeError("reduceList expects at least 1 element in list");
   }
 
   if (initialValue !== undefined) {
-    const initalDice: Dice<Result> = Dice.always(initialValue);
+    const initialDice: Dice<Result> = Dice.always(initialValue);
 
     return dices.reduce((prevDice, currentDice): Dice<Result> => {
       return combine(prevDice, currentDice, combiner);
-    }, initalDice);
+    }, initialDice);
   } else {
+    if (dices.length === 1) {
+      return dices[0]!;
+    }
+
     const combi = combiner as (prev: unknown, current: T) => unknown as (
       prev: T,
       current: T
