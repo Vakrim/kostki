@@ -21,13 +21,10 @@
   },
   "homepage": "https://github.com/Vakrim/kostki#readme",
   "devDependencies": {
-    "@types/benchmark": "^2",
     "@types/jest": "^29",
     "@types/node": "^16",
     "@types/object-hash": "^2",
-    "benchmark": "^2",
     "jest": "^29",
-    "microtime": "^3",
     "semantic-release": "^19",
     "ts-jest": "^29",
     "ts-node": "^10",

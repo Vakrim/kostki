@@ -12,5 +12,5 @@
     "noUncheckedIndexedAccess": true,
     "target": "ES6"
   },
-  "include": ["src/**/*", "benchmarks/**/*"],
+  "include": ["src/**/*"],
 }
