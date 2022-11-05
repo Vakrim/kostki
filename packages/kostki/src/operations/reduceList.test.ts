@@ -56,9 +56,19 @@ describe(reduceList, () => {
     );
   });
 
-  it("expects at least two dices when no there is no initial value", () => {
-    expect(() => reduceList([d10()], add)).toThrowError(
-      "reduceList expects at least 2 elements in list when no initial value was provided"
+  it("handles one value without initial value", () => {
+    expect(`${reduceList([d10()], add)}`).toMatchInlineSnapshot(`
+      "1 with 10.00%
+      2 with 10.00%
+      3 with 10.00%
+      4 with 10.00%
+      5 with 10.00%
+      6 with 10.00%
+      7 with 10.00%
+      8 with 10.00%
+      9 with 10.00%
+      10 with 10.00%"
+    `
     );
   });
 });

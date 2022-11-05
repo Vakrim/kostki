@@ -26,10 +26,8 @@ export function reduceList<Result, T>(
       return combine(prevDice, currentDice, combiner);
     }, initialDice);
   } else {
-    if (dices.length < 2) {
-      throw new TypeError(
-        "reduceList expects at least 2 elements in list when no initial value was provided"
-      );
+    if (dices.length === 1) {
+      return dices[0]!;
     }
 
     const combi = combiner as (prev: unknown, current: T) => unknown as (
