@@ -41,13 +41,13 @@ describe(Dice, () => {
   });
 
   it("can be mapped to other dices", () => {
-    const atackRoll = count(roll(2, 2).map((dice) => isHigherOrEqual(dice, 2)));
+    const attackRoll = count(roll(2, 2).map((dice) => isHigherOrEqual(dice, 2)));
 
-    expect(atackRoll.getProbabilityOf(0)).toEqual(1 / 4); // 1,1
-    expect(atackRoll.getProbabilityOf(1)).toEqual(2 / 4); // 1,2  2,1
-    expect(atackRoll.getProbabilityOf(2)).toEqual(1 / 4); // 2,2
+    expect(attackRoll.getProbabilityOf(0)).toEqual(1 / 4); // 1,1
+    expect(attackRoll.getProbabilityOf(1)).toEqual(2 / 4); // 1,2  2,1
+    expect(attackRoll.getProbabilityOf(2)).toEqual(1 / 4); // 2,2
 
-    const result = mapTo(atackRoll, (numberOfHits) => {
+    const result = mapTo(attackRoll, (numberOfHits) => {
       if (numberOfHits === 0) {
         return new Dice([[0, 1]]);
       }

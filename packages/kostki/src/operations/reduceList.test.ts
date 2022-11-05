@@ -3,8 +3,6 @@ import { reduceList } from "./reduceList";
 
 describe(reduceList, () => {
   it("reduces list of dices by combining them", () => {
-    const add = jest.fn((a: number, b: number) => a + b);
-
     const sum = reduceList([d10(), d10(), d10(), d10()], add);
 
     expect(add).toHaveBeenCalledTimes(
@@ -51,4 +49,18 @@ describe(reduceList, () => {
       40 with 0.01%"
     `);
   });
+
+  it("expects at least one dice", () => {
+    expect(() => reduceList([], add)).toThrowError(
+      "reduceList expects at least 1 element in list"
+    );
+  });
+
+  it("expects at least two dices when no there is no initial value", () => {
+    expect(() => reduceList([d10()], add)).toThrowError(
+      "reduceList expects at least 2 elements in list when no initial value was provided"
+    );
+  });
 });
+
+const add = jest.fn((a: number, b: number) => a + b);
