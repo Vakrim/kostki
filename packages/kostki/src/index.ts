@@ -4,6 +4,7 @@ export * from "./diceFactories";
 export { add } from "./operations/add";
 export { combine } from "./operations/combine";
 export { combineList } from "./operations/combineList";
+export { combineState } from "./operations/combineState";
 export { count } from "./operations/count";
 export { isHigherOrEqual } from "./operations/isHigherOrEqual";
 export { map } from "./operations/map";
